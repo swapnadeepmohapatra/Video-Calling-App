@@ -42,6 +42,19 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -80,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         loadingBar.setCanceledOnTouchOutside(false);
                         loadingBar.show();
 
-                        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber,60,TimeUnit.SECONDS,LoginActivity.this, callbacks);
+                        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, LoginActivity.this, callbacks);
                     } else {
                         editTextPhoneNumber.setError("Enter Valid Phone Number");
                     }
