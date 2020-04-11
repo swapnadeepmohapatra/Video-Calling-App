@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "5756694465",
+    "firebase_url": "https://video-calling-app-c902f.firebaseio.com",
+    "project_id": "video-calling-app-c902f",
+    "storage_bucket": "video-calling-app-c902f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5756694465:android:61fcf3fd1176cdca8b4940",
+        "android_client_info": {
+          "package_name": "com.swapnadeep.videocallingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5756694465-ujtogng2ur1o1abedecptuties2krm7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLB9ddS3GCxhBAHzuiMbHp4XdttwNgW9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "5756694465-ujtogng2ur1o1abedecptuties2krm7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
