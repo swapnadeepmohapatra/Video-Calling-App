@@ -23,6 +23,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:drawableStart="@drawable/edit_profile"
+        android:hint="Name"
         android:importantForAutofill="no"
         android:inputType="textPersonName" />
 
@@ -34,6 +35,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:drawableStart="@drawable/edit_status"
+        android:hint="Bio"
         android:importantForAutofill="no"
         android:inputType="text" />
 
