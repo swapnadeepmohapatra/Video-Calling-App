@@ -6,24 +6,29 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layouts_notification"
+        android:id="@+id/app_bar_layouts_find_friends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="60dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <EditText
+                    android:id="@+id/search_user_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="Notifications"
+                    android:drawableLeft="@drawable/search"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@android:color/white"
+                    android:hint="Contact Name..."
                     android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/darker_gray"
                     android:textSize="20sp" />
 
             </RelativeLayout>
@@ -32,9 +37,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notification_list"
+        android:id="@+id/find_friends_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/app_bar_layouts_notification" />
+        android:layout_below="@id/app_bar_layouts_find_friends" />
 
 </RelativeLayout>

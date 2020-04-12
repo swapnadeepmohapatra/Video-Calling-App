@@ -3,6 +3,8 @@ package com.swapnadeep.videocallingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,10 +15,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navView;
+    private RecyclerView recyclerViewContactList;
+    private ImageView findPeopleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,17 @@ public class MainActivity extends AppCompatActivity {
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
+        recyclerViewContactList = findViewById(R.id.contact_list);
+        findPeopleButton = findViewById(R.id.find_people_btn);
+        recyclerViewContactList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        findPeopleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent findPeopleIntent = new Intent(MainActivity.this, FindPeopleActivity.class);
+                startActivity(findPeopleIntent);
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
