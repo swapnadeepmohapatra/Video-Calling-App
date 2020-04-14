@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -55,6 +56,7 @@ public class FindPeopleActivity extends AppCompatActivity {
                     searchFriendsEditText.setError("Please enter something");
                 } else {
                     string = charSequence.toString();
+                    onStart();
 
                 }
             }
@@ -79,14 +81,20 @@ public class FindPeopleActivity extends AppCompatActivity {
 
         FirebaseRecyclerAdapter<Contact, FindFriendsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Contact, FindFriendsViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull FindFriendsViewHolder findFriendsViewHolder, int i, @NonNull Contact contact) {
+            protected void onBindViewHolder(@NonNull FindFriendsViewHolder findFriendsViewHolder, final int i, @NonNull final Contact contact) {
                 findFriendsViewHolder.userNameText.setText(contact.getName());
                 Picasso.get().load(contact.getImage()).into(findFriendsViewHolder.profileImageView);
 
                 findFriendsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        
+                        String visit_user_id = getRef(i).getKey();
+
+                        Intent intent = new Intent(FindPeopleActivity.this, ProfileActivity.class);
+                        intent.putExtra("visit_user_id", visit_user_id);
+                        intent.putExtra("profile_image", contact.getImage());
+                        intent.putExtra("profile_name", contact.getName());
+                        startActivity(intent);
                     }
                 });
             }
@@ -100,6 +108,9 @@ public class FindPeopleActivity extends AppCompatActivity {
                 return viewHolder;
             }
         };
+
+        findFriendsList.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
     }
 
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder {
