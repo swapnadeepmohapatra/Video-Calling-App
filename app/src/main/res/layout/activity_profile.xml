@@ -46,6 +46,7 @@
         android:background="@color/colorAccent"
         android:text="Cancel Friend Request"
         android:textColor="@color/colorPrimary"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:visibility="gone" />
 
 </RelativeLayout>
