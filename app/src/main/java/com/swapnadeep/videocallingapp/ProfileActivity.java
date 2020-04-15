@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         background_profile_view = findViewById(R.id.background_profile_view);
         name_profile = findViewById(R.id.name_profile);
         addFriend = findViewById(R.id.add_friend);
-        cancelFriend = findViewById(R.id.request_cancel_button);
+        cancelFriend = findViewById(R.id.decline_friend);
 
         Picasso.get().load(receiverUserImage).into(background_profile_view);
         name_profile.setText(receiverUserName);

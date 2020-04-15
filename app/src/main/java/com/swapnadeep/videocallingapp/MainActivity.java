@@ -32,6 +32,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navView;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView findPeopleButton;
     private DatabaseReference contactsRef;
     private DatabaseReference userRef;
-    private String userName, profileImage;
+    private String userName, profileImage, calledBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        checkForReceivingCall();
 
         FirebaseRecyclerOptions<Contact> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<Contact>().setQuery(contactsRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()), Contact.class).build();
 
@@ -160,6 +164,26 @@ public class MainActivity extends AppCompatActivity {
             userNameText = itemView.findViewById(R.id.name_contact);
             callButton = itemView.findViewById(R.id.call_button);
         }
+    }
+
+    private void checkForReceivingCall() {
+        userRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("Ringing").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("ringing")) {
+                    calledBy = Objects.requireNonNull(dataSnapshot.child("ringing").getValue()).toString();
+
+                    Intent callingIntent = new Intent(MainActivity.this, CallingActivity.class);
+                    callingIntent.putExtra("visit_user_id", calledBy);
+                    startActivity(callingIntent);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
