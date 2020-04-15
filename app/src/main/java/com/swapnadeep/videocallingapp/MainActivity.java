@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         recyclerViewContactList = findViewById(R.id.contact_list);
@@ -113,6 +114,16 @@ public class MainActivity extends AppCompatActivity {
                             contactsViewHolder.userNameText.setText(userName);
                             Picasso.get().load(profileImage).into(contactsViewHolder.contactImageView);
                         }
+
+                        contactsViewHolder.callButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent callingIntent = new Intent(MainActivity.this, CallingActivity.class);
+                                callingIntent.putExtra("visit_user_id", listUserId);
+                                startActivity(callingIntent);
+                            }
+                        });
+
                     }
 
                     @Override
