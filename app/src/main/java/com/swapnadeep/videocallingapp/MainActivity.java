@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -23,10 +24,12 @@ import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,8 +96,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        validateUser();
-
         FirebaseRecyclerOptions<Contact> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<Contact>().setQuery(contactsRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()), Contact.class).build();
 
         FirebaseRecyclerAdapter<Contact, ContactsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Contact, ContactsViewHolder>(firebaseRecyclerOptions) {
@@ -106,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            userName = Objects.requireNonNull(dataSnapshot.child("name").getValue()).toString();
-                            profileImage = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
+                            userName = dataSnapshot.child("name").getValue().toString();
+                            profileImage = dataSnapshot.child("image").getValue().toString();
 
                             contactsViewHolder.userNameText.setText(userName);
                             Picasso.get().load(profileImage).into(contactsViewHolder.contactImageView);
@@ -134,26 +135,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewContactList.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening();
 
-    }
-
-    private void validateUser() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                    startActivity(settingsIntent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public static class ContactsViewHolder extends RecyclerView.ViewHolder {
