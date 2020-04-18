@@ -3,8 +3,10 @@ package com.swapnadeep.videocallingapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ public class CallingActivity extends AppCompatActivity {
     private ImageView profileImageView;
     private ImageView cancelButton, callButton;
     private String receiverUserId, receiverUserImage, receiverUserName;
-    private String senderUserId, senderUserImage, senderUserName;
+    private String senderUserId, senderUserImage, senderUserName, checker, callingID, ringingID;
     private DatabaseReference userRef;
 
     @Override
@@ -45,7 +47,91 @@ public class CallingActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancel_call);
         callButton = findViewById(R.id.make_call);
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                checker = "clicked";
+
+                cancelCallingUser();
+            }
+        });
+
         getAndSetUserProfileInfo();
+
+    }
+
+    private void cancelCallingUser() {
+
+//        FIXME: FROM SENDER
+
+        userRef.child(senderUserId).child("Calling").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.hasChild("calling")) {
+                    callingID = Objects.requireNonNull(dataSnapshot.child("calling").getValue()).toString();
+
+                    userRef.child(callingID).child("Ringing").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                userRef.child(senderUserId).child("Calling").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        TODO: LoginActivity.class
+                                        startActivity(new Intent(CallingActivity.this, MainActivity.class));
+                                        finish();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    startActivity(new Intent(CallingActivity.this, MainActivity.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+//        FIXME: FROM RECEIVER
+
+        userRef.child(senderUserId).child("Ringing").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.hasChild("ringing")) {
+                    ringingID = Objects.requireNonNull(dataSnapshot.child("ringing").getValue()).toString();
+
+                    userRef.child(ringingID).child("Calling").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                userRef.child(senderUserId).child("Ringing").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        TODO: LoginActivity.class
+                                        startActivity(new Intent(CallingActivity.this, MainActivity.class));
+                                        finish();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    startActivity(new Intent(CallingActivity.this, MainActivity.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -87,7 +173,7 @@ public class CallingActivity extends AppCompatActivity {
         userRef.child(receiverUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild("Calling") && !dataSnapshot.hasChild("Ringing")) {
+                if (!checker.equals("clicked") && !dataSnapshot.hasChild("Calling") && !dataSnapshot.hasChild("Ringing")) {
                     final HashMap<String, Object> callingInfo = new HashMap<>();
                     callingInfo.put("calling", receiverUserId);
 
@@ -102,6 +188,21 @@ public class CallingActivity extends AppCompatActivity {
                             }
                         }
                     });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(senderUserId).hasChild("Ringing") && !dataSnapshot.child(senderUserId).hasChild("Calling")) {
+                    callButton.setVisibility(View.VISIBLE);
                 }
             }
 
