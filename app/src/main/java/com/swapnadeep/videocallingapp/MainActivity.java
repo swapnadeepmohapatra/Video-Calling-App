@@ -184,6 +184,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        userRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("Calling").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("calling")) {
+                    Intent callingIntent = new Intent(MainActivity.this, CallingActivity.class);
+                    callingIntent.putExtra("visit_user_id", dataSnapshot.child("calling").getValue().toString());
+                    startActivity(callingIntent);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
