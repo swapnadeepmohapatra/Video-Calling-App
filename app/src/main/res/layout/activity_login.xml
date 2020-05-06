@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="260dp"></TextView>
+        android:layout_marginTop="260dp"/>
 
 
     <RelativeLayout
@@ -47,7 +47,8 @@
                     android:id="@+id/ccp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
+                    app:ccp_contentColor="#FFFFFF"
+                    app:ccpDialog_textColor="#FFFFFF"
                     app:ccp_defaultNameCode="IN" />
 
                 <EditText

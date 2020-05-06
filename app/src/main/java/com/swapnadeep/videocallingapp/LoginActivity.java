@@ -42,19 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (firebaseUser != null) {
-            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(mainIntent);
-            finish();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -100,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
         callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -135,6 +123,19 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
+    }
+
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -145,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = task.getResult().getUser();
                             Log.d("TAG", "signInWithCredential:success" + user);
-                            sendUserToMainAct();
+                            sendUserToMainActivity();
                         } else {
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, task.getException().toString(), Toast.LENGTH_LONG).show();
@@ -154,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendUserToMainAct() {
+    private void sendUserToMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
