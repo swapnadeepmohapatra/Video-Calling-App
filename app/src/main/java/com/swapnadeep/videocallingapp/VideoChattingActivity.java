@@ -34,9 +34,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class VideoChattingActivity extends AppCompatActivity implements Session.SessionListener, PublisherKit.PublisherListener {
 
-    private static String API_KEY = "";
-    private static String SESSION_ID = "";
-    private static String TOKEN = "";
+    private static String API_KEY = "46722892";
+    private static String SESSION_ID = "1_MX40NjcyMjg5Mn5-MTU4ODc3ODEyODQ2OX45Uk9qYVBFcWl0TjNBb09ZYnZ6RXczbDh-fg";
+    private static String TOKEN = "T1==cGFydG5lcl9pZD00NjcyMjg5MiZzaWc9OGU1ZDQ1YzNjNTMxNmQ0ZTNlNWFiNjFkOWJjZmJjOWQwNmIxN2JkZTpzZXNzaW9uX2lkPTFfTVg0ME5qY3lNamc1TW41LU1UVTRPRGMzT0RFeU9EUTJPWDQ1VWs5cVlWQkZjV2wwVGpOQmIwOVpZblo2UlhjemJEaC1mZyZjcmVhdGVfdGltZT0xNTg4Nzc4MTg2Jm5vbmNlPTAuMzE0Mjk1MzEwMTYyNjYyJnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE1OTEzNzAxODYmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
     private static final String TAG = VideoChattingActivity.class.getSimpleName();
     private static final int RC_VIDEO_APP_PERMISSION = 124;
 
@@ -59,7 +59,7 @@ public class VideoChattingActivity extends AppCompatActivity implements Session.
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
         userID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        cancel_video_chat_button = findViewById(R.id.cancel_call);
+        cancel_video_chat_button = findViewById(R.id.close_video_chat_btn);
 
         cancel_video_chat_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +114,8 @@ public class VideoChattingActivity extends AppCompatActivity implements Session.
                 });
             }
         });
+
+        requestPermission();
     }
 
     @Override
